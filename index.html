@@ -23,6 +23,7 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:'Inter',system-ui
 a{color:inherit}
 [hidden]{display:none !important}
 h1,h2,h3,.mono{font-family:'Google Sans Code','JetBrains Mono',ui-monospace,monospace;font-weight:500}
+h1,h2,h3,.cap b,.xr .co,.frame .ttl{text-transform:uppercase}
 .red{color:var(--acc)}
 
 /* header */
@@ -39,12 +40,9 @@ h1,h2,h3,.mono{font-family:'Google Sans Code','JetBrains Mono',ui-monospace,mono
 /* menu: sheet from the bottom, collapsible */
 .menu{position:fixed;inset:0;z-index:40}
 .scrim{position:absolute;inset:-60px;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transition:opacity .3s ease}
-.sheet{position:absolute;bottom:0;left:0;right:0;max-height:92vh;max-height:92dvh;overflow-y:auto;overscroll-behavior:contain;background:#151517;border-radius:22px 22px 0 0;padding:8px 16px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -24px 60px rgba(0,0,0,.5);transform:translateY(104%);transition:transform .42s cubic-bezier(.3,.7,.2,1)}
-.sheet.drag{transition:none}
-.grab{display:flex;align-items:center;justify-content:center;width:100%;height:22px;padding:0;margin:0 0 2px;background:none;border:0;cursor:grab;touch-action:none}
-.grab::before{content:'';width:40px;height:4px;border-radius:2px;background:#3a3a3e}
-.menu.open .scrim{opacity:1}
-.menu.open .sheet{transform:none}
+.sheet{position:absolute;top:0;left:0;right:0;max-height:100vh;max-height:100dvh;overflow-y:auto;overscroll-behavior:contain;background:#151517;border-radius:0 0 22px 22px;padding:8px 16px 18px;box-shadow:0 24px 60px rgba(0,0,0,.5);transform:translateY(-104%);transition:transform .42s cubic-bezier(.3,.7,.2,1)}
+.menu.show .scrim{opacity:1}
+.menu.show .sheet{transform:none}
 .sheet .row{display:grid;grid-template-columns:44px 1fr auto;align-items:center}
 .menu nav{display:flex;flex-direction:column;max-width:680px;margin:6px auto 0}
 .menu nav a{font-family:'Google Sans Code',ui-monospace,monospace;font-size:clamp(44px,13vw,84px);font-weight:500;letter-spacing:-.04em;line-height:1;text-decoration:none;color:#77777a;padding:14px 4px 18px;border-bottom:1px solid var(--line)}
@@ -100,9 +98,6 @@ section.blk{padding:84px 0 8px}
 .xr .rl{display:block;color:var(--muted);font-size:15px;margin-top:4px}
 .xr .yr{color:var(--muted);font-size:14px;white-space:nowrap;padding-top:3px}
 .sub{font-family:'Google Sans Code',ui-monospace,monospace;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);margin:34px 0 4px}
-.open{margin:26px 0 0;font-size:17px}
-.open a{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
-.open a:hover{color:var(--acc)}
 .dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--acc);margin-right:8px;vertical-align:1px;box-shadow:0 0 0 4px rgba(255,59,47,.18)}
 
 /* skills & tools */
@@ -111,10 +106,17 @@ section.blk{padding:84px 0 8px}
 .ts p .d{color:var(--soft);padding:0 6px}
 
 /* footer */
-.foot{margin-top:56px;border-top:1px solid var(--line);overflow:hidden}
-.frow{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 0;font-size:14px;color:var(--muted);border-bottom:1px solid var(--line)}
-.big{margin:16px 0 0;font-family:'Google Sans Code',ui-monospace,monospace;font-weight:600;font-size:22vw;line-height:1.05;letter-spacing:-.07em;text-align:center;white-space:nowrap;user-select:none;color:transparent;-webkit-text-stroke:1.5px #3a3a3e}
-.big span{display:inline-block;padding:0 .04em}
+.foot{margin-top:96px;border-top:1px solid var(--line);padding:84px 0 calc(28px + env(safe-area-inset-bottom));text-align:center}
+.avail2{display:inline-flex;align-items:center;gap:10px;margin:0 0 18px;font-family:'Google Sans Code',ui-monospace,monospace;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.avail2 i{width:8px;height:8px;border-radius:50%;background:#3ddc6f;box-shadow:0 0 0 4px rgba(61,220,111,.16)}
+.lwt{margin:0 auto;font-size:clamp(42px,12.5vw,128px);font-weight:600;line-height:.98;letter-spacing:-.06em;max-width:11ch}
+.soc{display:flex;justify-content:center;gap:10px;margin:40px 0 0}
+.soc a{width:52px;height:52px;border-radius:50%;background:var(--card);border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;color:var(--fg);transition:border-color .2s ease,color .2s ease}
+.soc a:hover{border-color:var(--acc);color:var(--acc)}
+.soc svg{width:20px;height:20px;fill:currentColor}
+.soc svg.ln{fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;width:22px;height:22px}
+.copy{margin:48px 0 0;padding-top:22px;border-top:1px solid var(--line);font-family:'Google Sans Code',ui-monospace,monospace;font-size:13px;color:var(--muted);letter-spacing:.02em}
+.made{margin:10px 0 0;font-size:13px;color:var(--soft)}
 
 /* project and resume views */
 .pv,.doc{padding-top:20px}
@@ -164,7 +166,6 @@ section.blk{padding:84px 0 8px}
   .ts p{grid-row:2}
   .pv,.doc{max-width:900px}
   .pv h1,.doc h1{font-size:56px}
-  .frow{padding:24px 0}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.frame,.reel .play{transition:none}}
 </style>
@@ -183,7 +184,6 @@ section.blk{padding:84px 0 8px}
 <div class="menu" id="menu" hidden role="dialog" aria-modal="true" aria-label="Menu">
   <div class="scrim" data-close></div>
   <div class="sheet" id="sheet">
-    <button class="grab" id="grab" aria-label="Collapse menu"></button>
     <div class="row">
       <button class="iconbtn" id="closeMenu" aria-label="Close menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
       <span></span>
@@ -201,8 +201,7 @@ section.blk{padding:84px 0 8px}
 <main id="home">
   <div class="wrap">
     <section class="intro" id="top" aria-label="Intro">
-      <p class="tag"><i aria-hidden="true"></i>Klonex · Lagos, Nigeria</p>
-      <h1>Visual &amp; Motion Designer<span class="red">.</span></h1>
+      <h1>Visual &amp; Motion Designer</h1>
       <p class="name">Olalekan Ayorinde</p>
       <p class="t">I make motion that makes ideas impossible to ignore, across brand, product and screen. Launch videos, explainers and campaigns for Web3 startups, education brands, creators and film.</p>
       <p class="t">I own a project from concept to final render in After Effects, Blender, Cavalry and DaVinci Resolve, and my work has reached hundreds of thousands of views for clients across Web2 and Web3.</p>
@@ -239,7 +238,6 @@ section.blk{padding:84px 0 8px}
         <div class="xr"><div><span class="co">Blockfest Africa</span><span class="rl">Visual &amp; Motion Designer</span></div><span class="yr">Sep 2025 — Present</span></div>
         <div class="xr"><div><span class="co">TechNova Summit</span><span class="rl">Motion Designer</span></div><span class="yr">Jan 2026 — Present</span></div>
       </div>
-      <p class="open"><span class="dot" aria-hidden="true"></span>Open to work. <a href="mailto:klonexofficial@gmail.com">Reach out ↗</a></p>
     </section>
 
     <section class="blk ts" id="skills" aria-label="Skills and tools">
@@ -286,9 +284,17 @@ section.blk{padding:84px 0 8px}
 
 <footer class="foot" id="contact">
   <div class="wrap">
-    <div class="frow"><span>Klonex ©2026</span><span>Made by Àmúró &amp; Klaus</span></div>
+    <p class="avail2"><i aria-hidden="true"></i>Available for new works</p>
+    <h2 class="lwt">Let's work <span class="red">together</span></h2>
+    <div class="soc">
+      <a href="https://x.com/klonex_" rel="noopener" aria-label="X (Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.8 3h3.1l-6.8 7.8L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.3-8.3L2 3h6.4l4.4 5.8L17.8 3zm-1.1 16.2h1.7L7.4 4.7H5.6l11.1 14.5z"></path></svg></a>
+      <a href="https://instagram.com/klonex.official" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.7 4.8-4.9 4.9-1.3.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-3.3-.1-4.8-1.7-4.9-4.9C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8C2.4 3.9 3.9 2.4 7.2 2.3 8.4 2.2 8.8 2.2 12 2.2zm0 4.9a4.9 4.9 0 1 0 0 9.8 4.9 4.9 0 0 0 0-9.8zm0 8.1a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4zm5.1-9.4a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z"></path></svg></a>
+      <a href="https://www.linkedin.com/in/klonexofficial" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45z"></path></svg></a>
+      <a href="mailto:klonexofficial@gmail.com" aria-label="Email klonexofficial@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" class="ln"><rect x="3" y="5" width="18" height="14" rx="2.5"></rect><path d="M4 7l8 6 8-6"></path></svg></a>
+    </div>
+    <p class="copy">©2026 klonexofficial · visual &amp; motion design</p>
+    <p class="made">Made by Àmúró &amp; Klaus</p>
   </div>
-  <p class="big" id="big" aria-hidden="true"><span>Klonex</span></p>
 </footer>
 
 <script>
@@ -411,41 +417,16 @@ section.blk{padding:84px 0 8px}
   window.addEventListener('hashchange', route);
   route();
 
-  // Footer wordmark: stretch to the full width
-  function fitBig() {
-    var p = document.getElementById('big'), t = p.firstChild;
-    p.style.fontSize = '100px';
-    var w = t.getBoundingClientRect().width;
-    if (w) p.style.fontSize = (100 * (document.documentElement.clientWidth - 8) / w) + 'px';
-  }
-  fitBig();
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitBig);
-  var fr = 0; window.addEventListener('resize', function () { cancelAnimationFrame(fr); fr = requestAnimationFrame(fitBig); });
-
-  // Menu: slides up from the bottom; tap the handle or drag it down to collapse
+  // Menu: drops down from the top
   var menu = document.getElementById('menu'), ob = document.getElementById('openMenu'), sheet = document.getElementById('sheet');
   function setMenu(on) {
     ob.setAttribute('aria-expanded', on ? 'true' : 'false');
     document.body.classList.toggle('lock', on); document.body.classList.toggle('menu-on', on);
-    if (on) { pushLayer('menu'); menu.hidden = false; requestAnimationFrame(function () { menu.classList.add('open'); document.getElementById('closeMenu').focus({ preventScroll: true }); }); }
-    else { dropLayer('menu'); menu.classList.remove('open'); setTimeout(function () { if (!menu.classList.contains('open')) menu.hidden = true; }, 440); if (menu.contains(document.activeElement)) ob.focus({ preventScroll: true }); }
+    if (on) { pushLayer('menu'); menu.hidden = false; requestAnimationFrame(function () { menu.classList.add('show'); document.getElementById('closeMenu').focus({ preventScroll: true }); }); }
+    else { dropLayer('menu'); menu.classList.remove('show'); setTimeout(function () { if (!menu.classList.contains('show')) menu.hidden = true; }, 440); if (menu.contains(document.activeElement)) ob.focus({ preventScroll: true }); }
   }
   ob.addEventListener('click', function () { setMenu(true); });
   document.getElementById('closeMenu').addEventListener('click', function () { setMenu(false); });
-  document.getElementById('grab').addEventListener('click', function () { setMenu(false); });
-  var dy0 = null, dy = 0, t0 = 0;
-  function dStart(y) { if (sheet.scrollTop > 0) return; dy0 = y; dy = 0; t0 = Date.now(); sheet.classList.add('drag'); }
-  function dMove(y, e) { if (dy0 === null) return; dy = Math.max(0, y - dy0); sheet.style.transform = 'translateY(' + dy + 'px)'; if (dy > 4 && e && e.cancelable) e.preventDefault(); }
-  function dEnd() {
-    if (dy0 === null) return;
-    var fast = dy / Math.max(1, Date.now() - t0) > 0.5;
-    dy0 = null; sheet.classList.remove('drag'); sheet.style.transform = '';
-    if (dy > 90 || (fast && dy > 30)) setMenu(false);
-  }
-  sheet.addEventListener('touchstart', function (e) { dStart(e.touches[0].clientY); }, { passive: true });
-  sheet.addEventListener('touchmove', function (e) { dMove(e.touches[0].clientY, e); }, { passive: false });
-  sheet.addEventListener('touchend', dEnd);
-  sheet.addEventListener('touchcancel', dEnd);
   menu.querySelectorAll('[data-close]').forEach(function (a) {
     a.addEventListener('click', function (e) {
       var href = a.getAttribute('href');
