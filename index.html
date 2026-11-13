@@ -83,13 +83,16 @@ body.menu-on .hdr{opacity:0;pointer-events:none}
 section.blk{padding:84px 0 8px}
 .sh{font-size:28px;letter-spacing:-.04em;margin:0 0 8px;display:flex;align-items:baseline;gap:10px}
 .sh .n{font-size:15px;color:var(--soft);letter-spacing:0}
-.more{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;margin:34px auto 0;max-width:280px;border:1px solid var(--line);border-radius:999px;text-decoration:none;font-family:'Google Sans Code',ui-monospace,monospace;font-size:14px;letter-spacing:.1em;text-transform:uppercase;transition:border-color .2s ease,color .2s ease}
-.more:hover{border-color:var(--acc);color:var(--acc)}
+.more{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;margin:34px auto 0;max-width:280px;text-decoration:none;font-family:'Google Sans Code',ui-monospace,monospace;font-size:14px;letter-spacing:.1em;text-transform:uppercase;transition:color .2s ease}
+.more:hover{color:var(--acc)}
 .new{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:999px;background:var(--acc);color:#fff;font-size:10px;letter-spacing:.06em;vertical-align:1px}
 .lede{margin:0 0 24px;color:var(--muted);font-family:'Google Sans Code',ui-monospace,monospace;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
 
 /* work cards: black frames until the videos arrive */
 .plist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
+#alist{grid-template-columns:minmax(0,1fr)}
+#alist .frame{aspect-ratio:16/9 !important}
+#alist .pcol{gap:30px}
 .pcol{display:flex;flex-direction:column;gap:22px;min-width:0}
 .pcard{display:block;text-decoration:none;color:var(--fg);min-width:0}
 .frame{position:relative;border-radius:14px;overflow:hidden;background:#000;aspect-ratio:16/10;border:1px solid var(--line);transition:transform .35s ease}
@@ -374,12 +377,12 @@ section.blk{padding:84px 0 8px}
   var allBuilt = false;
   function buildAll() {
     if (allBuilt) return; allBuilt = true;
-    document.getElementById('alist').innerHTML = twoCols(ALL.map(function (a, i) {
+    document.getElementById('alist').innerHTML = '<div class="pcol">' + ALL.map(function (a, i) {
       var p = a.ref ? P.filter(function (x) { return x.id === a.ref; })[0] : null;
       if (p) return card(p, i);
       var f = frame({ name: a.name }, i).replace('<div class="frame">', '<div class="frame" style="aspect-ratio:' + SHAPES[i % SHAPES.length] + '">');
       return '<div class="pcard">' + f + '<div class="cap"><span class="y"></span><b>' + esc(a.name) + (a.isNew ? '<span class="new">NEW</span>' : '') + '</b></div></div>';
-    }));
+    }).join('') + '</div>';
     document.getElementById('acount').textContent = ALL.length;
   }
   document.getElementById('pcount').textContent = P.length;
