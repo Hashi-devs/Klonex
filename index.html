@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Klonex — Visual &amp; Motion Designer</title>
+<meta name="description" content="Klonex (Olalekan Ayorinde) — visual and motion designer in Lagos. Launch videos, explainers and brand campaigns for Web2 and Web3.">
+<meta property="og:title" content="Klonex — Visual & Motion Designer">
+<meta property="og:description" content="Motion that makes ideas impossible to ignore, across brand, product and screen.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#0b0b0c">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0c'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23ff3b2f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:wght@300..800&family=Inter:wght@400..700&display=swap" rel="stylesheet">
+
+<style>
+:root{--bg:#0b0b0c;--card:#141416;--line:#232326;--fg:#f2f2f0;--muted:#9a9a96;--soft:#66666a;--acc:#ff3b2f}
+*{box-sizing:border-box}
+html{-webkit-tap-highlight-color:transparent;scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.5}
+a{color:inherit}
+[hidden]{display:none !important}
+h1,h2,h3,.mono{font-family:'Google Sans Code','JetBrains Mono',ui-monospace,monospace;font-weight:500}
+.red{color:var(--acc)}
+
+/* header */
+.hdr{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:44px 1fr auto;align-items:center;padding:8px 16px;background:rgba(11,11,12,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line);transition:opacity .3s ease}
+.iconbtn{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;background:none;border:0;color:var(--fg);cursor:pointer;border-radius:10px}
+.iconbtn:hover{background:var(--card)}
+.iconbtn svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round}
+.hicons{display:flex;gap:2px}
+.ico{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;color:var(--fg);border-radius:10px}
+.ico:hover{background:var(--card)}
+.ico svg{width:20px;height:20px;fill:currentColor}
+.ico svg.ln{fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;width:22px;height:22px}
+
+/* menu: sheet from the bottom, collapsible */
+.menu{position:fixed;inset:0;z-index:40}
+.scrim{position:absolute;inset:-60px;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transition:opacity .3s ease}
+.sheet{position:absolute;bottom:0;left:0;right:0;max-height:92vh;max-height:92dvh;overflow-y:auto;overscroll-behavior:contain;background:#151517;border-radius:22px 22px 0 0;padding:8px 16px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -24px 60px rgba(0,0,0,.5);transform:translateY(104%);transition:transform .42s cubic-bezier(.3,.7,.2,1)}
+.sheet.drag{transition:none}
+.grab{display:flex;align-items:center;justify-content:center;width:100%;height:22px;padding:0;margin:0 0 2px;background:none;border:0;cursor:grab;touch-action:none}
+.grab::before{content:'';width:40px;height:4px;border-radius:2px;background:#3a3a3e}
+.menu.open .scrim{opacity:1}
+.menu.open .sheet{transform:none}
+.sheet .row{display:grid;grid-template-columns:44px 1fr auto;align-items:center}
+.menu nav{display:flex;flex-direction:column;max-width:680px;margin:6px auto 0}
+.menu nav a{font-family:'Google Sans Code',ui-monospace,monospace;font-size:clamp(44px,13vw,84px);font-weight:500;letter-spacing:-.04em;line-height:1;text-decoration:none;color:#77777a;padding:14px 4px 18px;border-bottom:1px solid var(--line)}
+.menu nav a:last-child{border-bottom:0}
+.menu nav a:hover,.menu nav a:focus-visible{color:var(--fg)}
+body.lock{overflow:hidden}
+body.menu-on .hdr{opacity:0;pointer-events:none}
+
+.wrap{max-width:680px;margin:0 auto;padding:0 20px}
+
+/* intro */
+.intro{padding:56px 0 8px}
+.tag{font-family:'Google Sans Code',ui-monospace,monospace;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 18px;display:flex;align-items:center;gap:10px}
+.tag i{width:8px;height:8px;border-radius:50%;background:var(--acc);display:inline-block}
+.intro h1{font-size:min(46px,11vw);line-height:1.02;letter-spacing:-.045em;margin:0 0 6px}
+.name{margin:0 0 26px;color:var(--muted);font-size:17px}
+.intro p.t{font-size:18px;line-height:1.6;color:#c3c3bf;margin:0 0 16px}
+.avail{font-family:'Google Sans Code',ui-monospace,monospace;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:24px 0 0}
+
+/* showreel */
+.reel{position:relative;margin:36px 0 0;border-radius:20px;overflow:hidden;background:#000;aspect-ratio:16/9;border:1px solid var(--line)}
+.reel video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.reel .lbl{position:absolute;left:16px;top:14px;font-family:'Google Sans Code',ui-monospace,monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#5c5c60}
+.reel .play{position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;border:1px solid #333336;display:flex;align-items:center;justify-content:center;color:#f2f2f0;text-decoration:none;transition:transform .25s ease,border-color .25s ease}
+.reel .play:hover{transform:scale(1.06);border-color:var(--acc)}
+.reel .play svg{width:22px;height:22px;fill:currentColor;margin-left:3px}
+.pill{position:absolute;right:12px;bottom:12px;display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 16px;border-radius:999px;background:var(--acc);color:#fff;text-decoration:none;font-family:'Google Sans Code',ui-monospace,monospace;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.pill:hover{background:#ff5246}
+
+/* sections */
+section.blk{padding:84px 0 8px}
+.sh{font-size:28px;letter-spacing:-.04em;margin:0 0 8px;display:flex;align-items:baseline;gap:10px}
+.sh .n{font-size:15px;color:var(--soft);letter-spacing:0}
+.lede{margin:0 0 24px;color:var(--muted);font-family:'Google Sans Code',ui-monospace,monospace;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+
+/* work cards: black frames until the videos arrive */
+.plist{display:flex;flex-direction:column;gap:30px}
+.pcard{display:block;text-decoration:none;color:var(--fg)}
+.frame{position:relative;border-radius:16px;overflow:hidden;background:#000;aspect-ratio:16/10;border:1px solid var(--line);transition:transform .35s ease}
+.pcard:hover .frame{transform:scale(.985)}
+.frame video,.frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.frame .num{position:absolute;left:14px;top:12px;font-family:'Google Sans Code',ui-monospace,monospace;font-size:12px;color:#4a4a4e;letter-spacing:.08em}
+.frame .ttl{position:absolute;left:14px;right:14px;bottom:12px;font-family:'Google Sans Code',ui-monospace,monospace;font-size:clamp(22px,6vw,40px);font-weight:600;letter-spacing:-.05em;line-height:1;color:#1f1f22}
+.cap{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-top:12px}
+.cap b{font-family:'Google Sans Code',ui-monospace,monospace;font-weight:500;font-size:18px;letter-spacing:-.02em}
+.cap small{display:block;color:var(--muted);font-size:14px;margin-top:2px}
+.cap span:last-child{color:var(--muted);font-size:14px;white-space:nowrap}
+
+/* experience */
+.xl{border-top:1px solid var(--line)}
+.xr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px;align-items:start;padding:18px 0;border-bottom:1px solid var(--line)}
+.xr .co{font-family:'Google Sans Code',ui-monospace,monospace;font-size:18px;font-weight:500;letter-spacing:-.02em}
+.xr .rl{display:block;color:var(--muted);font-size:15px;margin-top:4px}
+.xr .yr{color:var(--muted);font-size:14px;white-space:nowrap;padding-top:3px}
+.sub{font-family:'Google Sans Code',ui-monospace,monospace;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);margin:34px 0 4px}
+.open{margin:26px 0 0;font-size:17px}
+.open a{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
+.open a:hover{color:var(--acc)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--acc);margin-right:8px;vertical-align:1px;box-shadow:0 0 0 4px rgba(255,59,47,.18)}
+
+/* skills & tools */
+.ts h3{font-size:20px;letter-spacing:-.03em;margin:0 0 10px}
+.ts p{margin:0 0 30px;color:var(--muted);font-size:17px;line-height:1.7}
+.ts p .d{color:var(--soft);padding:0 6px}
+
+/* footer */
+.foot{margin-top:56px;border-top:1px solid var(--line);overflow:hidden}
+.frow{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 0;font-size:14px;color:var(--muted);border-bottom:1px solid var(--line)}
+.big{margin:16px 0 0;font-family:'Google Sans Code',ui-monospace,monospace;font-weight:600;font-size:22vw;line-height:1.05;letter-spacing:-.07em;text-align:center;white-space:nowrap;user-select:none;color:transparent;-webkit-text-stroke:1.5px #3a3a3e}
+.big span{display:inline-block;padding:0 .04em}
+
+/* project and resume views */
+.pv,.doc{padding-top:20px}
+.back{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:44px;margin-left:-10px;border-radius:10px;color:var(--muted);text-decoration:none}
+.back:hover{color:var(--fg)}
+.back svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.pv h1,.doc h1{font-size:min(40px,9.5vw);letter-spacing:-.045em;line-height:1.05;margin:22px 0 6px}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:16px;color:var(--muted);font-size:15px;margin-bottom:24px;flex-wrap:wrap}
+.visit{display:inline-flex;align-items:center;gap:6px;min-height:42px;padding:0 18px;border-radius:999px;background:var(--fg);color:#111;text-decoration:none;font-size:14px;font-weight:600}
+.visit:hover{background:#fff}
+.tabs{position:sticky;top:61px;z-index:10;display:flex;gap:6px;margin:30px 0 0;border-bottom:1px solid var(--line);background:rgba(11,11,12,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.tab{min-height:44px;padding:0 14px;background:none;border:0;border-bottom:2px solid transparent;color:var(--muted);font:inherit;font-size:15px;cursor:pointer;margin-bottom:-1px}
+.tab[aria-current="true"]{color:var(--fg);border-color:var(--acc)}
+.tp{padding:24px 0 8px;font-size:17px;line-height:1.65;color:#c3c3bf}
+.tp section{scroll-margin-top:120px;padding-top:8px}
+.tp section+section{margin-top:28px}
+.tp h2{font-size:22px;letter-spacing:-.03em;margin:0 0 12px;color:var(--fg)}
+.tp p{margin:0 0 16px}
+.tp ul{margin:0 0 16px;padding-left:20px}
+.tp li{margin:6px 0}
+.cta{margin:48px 0 0;padding:28px 24px;border:1px solid var(--line);border-radius:16px;background:var(--card)}
+.cta h2{margin:0 0 10px;font-size:24px;letter-spacing:-.03em}
+.cta a{font-size:17px;color:var(--acc);text-decoration:none;word-break:break-all}
+.cta a:hover{text-decoration:underline;text-underline-offset:4px}
+.dsub{color:var(--muted);margin:0 0 18px}
+.pages{display:flex;flex-direction:column;gap:14px}
+.pages img{display:block;width:100%;height:auto;border-radius:10px;background:#fff;box-shadow:0 18px 50px rgba(0,0,0,.45)}
+.dl{margin:22px 0 0}
+
+@media (min-width:900px){
+  .wrap{max-width:1120px;padding:0 40px}
+  .hdr{padding:10px 40px}
+  .intro{padding:96px 0 8px}
+  .intro h1{font-size:76px}
+  .intro .t,.name{max-width:720px}
+  .intro p.t{font-size:20px}
+  .reel{margin-top:48px}
+  section.blk{padding:112px 0 8px}
+  .sh{font-size:40px}
+  .plist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px 24px}
+  .plist .pcard:first-child{grid-column:1/-1}
+  .plist .pcard:first-child .frame{aspect-ratio:16/8}
+  .plist .pcard:last-child:nth-child(even){grid-column:1/-1}
+  .plist .pcard:last-child:nth-child(even) .frame{aspect-ratio:16/8}
+  .ts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 48px}
+  .ts h3{grid-row:1}
+  .ts p{grid-row:2}
+  .pv,.doc{max-width:900px}
+  .pv h1,.doc h1{font-size:56px}
+  .frow{padding:24px 0}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.frame,.reel .play{transition:none}}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <button class="iconbtn" id="openMenu" aria-label="Open menu" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
+  <span></span>
+  <div class="hicons" id="icons">
+    <a class="ico" href="mailto:klonexofficial@gmail.com" aria-label="Email klonexofficial@gmail.com"><svg class="ln" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"></rect><path d="M4 7l8 6 8-6"></path></svg></a>
+    <a class="ico" href="https://x.com/klonex_" rel="noopener" aria-label="Klonex on X (Twitter)"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:19px;height:19px"><path d="M17.8 3h3.1l-6.8 7.8L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.3-8.3L2 3h6.4l4.4 5.8L17.8 3zm-1.1 16.2h1.7L7.4 4.7H5.6l11.1 14.5z"></path></svg></a>
+  </div>
+</header>
+
+<div class="menu" id="menu" hidden role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="scrim" data-close></div>
+  <div class="sheet" id="sheet">
+    <button class="grab" id="grab" aria-label="Collapse menu"></button>
+    <div class="row">
+      <button class="iconbtn" id="closeMenu" aria-label="Close menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+      <span></span>
+      <div class="hicons" id="icons2"></div>
+    </div>
+    <nav aria-label="Main">
+      <a href="#top" data-close>home</a>
+      <a href="#work" data-close>work</a>
+      <a href="#resume" data-close>resume</a>
+      <a href="#contact" data-close>contact</a>
+    </nav>
+  </div>
+</div>
+
+<main id="home">
+  <div class="wrap">
+    <section class="intro" id="top" aria-label="Intro">
+      <p class="tag"><i aria-hidden="true"></i>Klonex · Lagos, Nigeria</p>
+      <h1>Visual &amp; Motion Designer<span class="red">.</span></h1>
+      <p class="name">Olalekan Ayorinde</p>
+      <p class="t">I make motion that makes ideas impossible to ignore, across brand, product and screen. Launch videos, explainers and campaigns for Web3 startups, education brands, creators and film.</p>
+      <p class="t">I own a project from concept to final render in After Effects, Blender, Cavalry and DaVinci Resolve, and my work has reached hundreds of thousands of views for clients across Web2 and Web3.</p>
+      <p class="avail">Open to full-time, contract and studio roles</p>
+    </section>
+
+    <div class="reel" id="reel" aria-label="Showreel">
+      <!-- Showreel video goes here: <video src="media/showreel.mp4" poster="media/showreel.jpg" autoplay muted loop playsinline></video> -->
+      <span class="lbl">Showreel 2026</span>
+      <a class="play" href="https://x.com/klonex_/status/2121254529178173736" rel="noopener" aria-label="Play the showreel on X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"></path></svg></a>
+      <a class="pill" href="https://x.com/klonex_/status/2121254529178173736" rel="noopener">Watch full reel ↗</a>
+    </div>
+
+    <section class="blk" id="work" aria-labelledby="work-h">
+      <h2 class="sh" id="work-h">Selected work <span class="n" id="pcount"></span></h2>
+      <p class="lede">30+ brands · Web2 &amp; Web3 · Concept to final render</p>
+      <div class="plist" id="plist"></div>
+    </section>
+
+    <section class="blk" id="experience" aria-labelledby="exp-h">
+      <h2 class="sh" id="exp-h">Experience</h2>
+      <div class="xl" style="margin-top:22px">
+        <div class="xr"><div><span class="co">Nirvana Academy</span><span class="rl">Motion Designer</span></div><span class="yr">Sep 2025 — Present</span></div>
+        <div class="xr"><div><span class="co">Freelance</span><span class="rl">Motion Designer</span></div><span class="yr">Sep 2025 — Present</span></div>
+        <div class="xr"><div><span class="co">Zerocard</span><span class="rl">Motion Designer &amp; Illustrator</span></div><span class="yr">Nov 2025 — Apr 2026</span></div>
+        <div class="xr"><div><span class="co">VentureMind AI</span><span class="rl">Motion Designer</span></div><span class="yr">Nov 2025 — Feb 2026</span></div>
+        <div class="xr"><div><span class="co">Xi Studios</span><span class="rl">Brand Designer</span></div><span class="yr">Jul — Sep 2025</span></div>
+        <div class="xr"><div><span class="co">Buildhubb</span><span class="rl">Lead Designer</span></div><span class="yr">Jun 2023 — Apr 2025</span></div>
+        <div class="xr"><div><span class="co">GDG LASU</span><span class="rl">Graphic &amp; Motion Designer</span></div><span class="yr">Oct 2023 — Jul 2024</span></div>
+        <div class="xr"><div><span class="co">Self-employed</span><span class="rl">Graphic Designer</span></div><span class="yr">Dec 2022 — Jun 2023</span></div>
+      </div>
+      <p class="sub">Community</p>
+      <div class="xl">
+        <div class="xr"><div><span class="co">Blockfest Africa</span><span class="rl">Visual &amp; Motion Designer</span></div><span class="yr">Sep 2025 — Present</span></div>
+        <div class="xr"><div><span class="co">TechNova Summit</span><span class="rl">Motion Designer</span></div><span class="yr">Jan 2026 — Present</span></div>
+      </div>
+      <p class="open"><span class="dot" aria-hidden="true"></span>Open to work. <a href="mailto:klonexofficial@gmail.com">Reach out ↗</a></p>
+    </section>
+
+    <section class="blk ts" id="skills" aria-label="Skills and tools">
+      <h3>Tools</h3>
+      <p>After Effects<span class="d">·</span>Blender<span class="d">·</span>Cavalry<span class="d">·</span>DaVinci Resolve &amp; Fusion<span class="d">·</span>Photoshop<span class="d">·</span>Figma<span class="d">·</span>Lottie / Bodymovin<span class="d">·</span>Jitter<span class="d">·</span>Rive</p>
+      <h3>Skills</h3>
+      <p>Motion Design<span class="d">·</span>Animation<span class="d">·</span>3D<span class="d">·</span>Illustration<span class="d">·</span>Video Editing<span class="d">·</span>Brand Identity<span class="d">·</span>Logo Design<span class="d">·</span>Graphic Design<span class="d">·</span>UI/UX Design<span class="d">·</span>Website Design &amp; Build</p>
+    </section>
+  </div>
+</main>
+
+<main id="project" hidden>
+  <div class="wrap pv">
+    <a class="back" href="#work" aria-label="Back to work"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg></a>
+    <div id="pvframe" style="margin-top:14px"></div>
+    <h1 id="pvtitle"></h1>
+    <div class="meta"><span id="pvsub"></span><a class="visit" id="pvlink" href="#" rel="noopener" hidden>Visit ↗</a></div>
+    <nav class="tabs" aria-label="Jump to section">
+      <button class="tab" id="t-overview" aria-current="true">Overview</button>
+      <button class="tab" id="t-challenge">Challenge</button>
+      <button class="tab" id="t-solution">Solution</button>
+    </nav>
+    <div class="tp" id="tp"></div>
+    <div class="cta">
+      <h2>Got a project in mind?</h2>
+      <a href="mailto:klonexofficial@gmail.com">klonexofficial@gmail.com ↗</a>
+    </div>
+  </div>
+</main>
+
+<main id="docview" hidden>
+  <div class="wrap doc">
+    <a class="back" href="#top" aria-label="Back to home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg></a>
+    <h1>Resume</h1>
+    <p class="dsub">Preview of Olalekan's resume. Download the PDF below.</p>
+    <div class="pages">
+      <img src="docs/cv-1.webp" alt="Resume of Olalekan Ayorinde, page 1" width="1275" height="1650" loading="lazy" decoding="async">
+      <img src="docs/cv-2.webp" alt="Resume page 2" width="1275" height="1650" loading="lazy" decoding="async">
+      <img src="docs/cv-3.webp" alt="Resume page 3" width="1275" height="1650" loading="lazy" decoding="async">
+    </div>
+    <div class="dl"><a class="visit" href="docs/Olalekan-Ayorinde-Klonex-CV.pdf" download>Download PDF</a></div>
+  </div>
+</main>
+
+<footer class="foot" id="contact">
+  <div class="wrap">
+    <div class="frow"><span>Klonex ©2026</span><span>Made by Àmúró &amp; Klaus</span></div>
+  </div>
+  <p class="big" id="big" aria-hidden="true"><span>Klonex</span></p>
+</footer>
+
+<script>
+(function () {
+  // Work. Each piece shows a black frame until its video is added: set video: 'media/name.mp4' (and poster) to fill it.
+  var P = [
+    { id: 'the-big-8', name: 'The Big 8 (TB8)', client: 'The Big 8 · Film', role: 'Motion Designer', year: '2025', link: 'https://x.com/thebig8film',
+      overview: ['Motion and campaign work for The Big 8, an animated film project, produced as part of Klonex\'s freelance practice.'],
+      challenge: ['Give a film its own motion language for social: launch moments that stop the scroll and feel like part of the film\'s world.'],
+      solution: [['Launch and campaign motion for the film\'s social channels.', 'Delivered end to end: brief, animation, revisions and platform-ready exports.']] },
+    { id: 'blockfest-africa', name: 'Blockfest Africa', client: 'Africa\'s leading Web3 festival', role: 'Visual & Motion Designer', year: '2025 — 26',
+      overview: ['Brand graphics, illustrations and motion videos for Blockfest Africa, across the inaugural Lagos edition in 2025 and the South Africa edition in 2026, which Klonex worked on remotely.'],
+      challenge: ['Keep a festival\'s visuals consistent across two editions in two countries, on a short seasonal timeline.'],
+      solution: [['Brand graphics, illustrations and motion videos for campaign and event comms.', 'Supported the Lagos gathering and the 2026 Cape Town edition.']] },
+    { id: 'zerocard', name: 'Zerocard', client: 'Crypto spending card', role: 'Motion Designer & Illustrator', year: '2025 — 26', link: 'https://getzerocard.com/',
+      overview: ['Brand illustrations, motion videos and campaign flyers for Zerocard, an Africa-focused crypto spending product: virtual and physical Visa cards funded with USDC and USDT.'],
+      challenge: ['Turn technical crypto payments into everyday, culturally relevant stories, and drive app downloads and card activation during the early growth window.'],
+      solution: [['Social-first assets explaining instant spend, cross-border transfers, Apple Pay and Google Pay, and easy onboarding, across X, Instagram and launch campaigns.', 'Motion explainers and product walkthroughs.', 'A consistent visual system of illustrations, typography and the green brand language for flyers and short-form video.']] },
+    { id: 'nirvana-academy', name: 'Nirvana Academy', client: 'Web3 education · 10,000+ graduates', role: 'Motion Designer', year: '2025 — Now', link: 'https://x.com/TheNirvanAcad',
+      overview: ['Klonex owns the visual and motion output for Nirvana Academy across social, event and education campaigns.'],
+      challenge: ['Ship regularly for an active Web3 education brand with fast-turnaround comms, while keeping every piece on brand.'],
+      solution: [['Graphics for cohort launches, class announcements, community meetups and partnership content.', 'Motion videos that promote programmes, recap events and explain what the academy offers.', 'Everything kept consistent with the Nirvana brand: the chess motif, bold typography and a community-first tone.']] },
+    { id: 'venturemind-ai', name: 'VentureMind AI', client: 'Two sister products', role: 'Motion Designer', year: '2025 — 26', link: 'https://www.venturemind.ai/',
+      overview: ['Motion designer on two VentureMind AI sister products, delivering 5+ videos across launch and feature-update campaigns.'],
+      challenge: ['Communicate new products and UI changes quickly, without long explainers, inside an established design system and a high-tempo team.'],
+      solution: [['Launch videos introducing new products and capabilities to community and social channels.', 'Feature-update motion that shows UI and functionality changes at a glance.', 'Followed the existing colour, type, logo lockups and motion language so work stayed consistent across products.']] },
+    { id: 'technova-summit', name: 'TechNova Summit', client: 'Innovation festival · Abakaliki', role: 'Motion Designer', year: '2026',
+      overview: ['Campaign graphics and motion videos for the inaugural TechNova Summit, a multi-day festival in Abakaliki, Ebonyi State focused on African talent, tech and opportunity.'],
+      challenge: ['Give a new South-East Nigeria innovation festival a consistent, professional identity ahead of its March 2026 gathering, on a seasonal timeline.'],
+      solution: [['Campaign graphics and motion videos for brand and event comms.', 'Delivered across the festival cycle.']] }
+  ];
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function frame(p, i) {
+    var media = p.video ? '<video src="' + esc(p.video) + '"' + (p.poster ? ' poster="' + esc(p.poster) + '"' : '') + ' muted loop playsinline preload="none" data-auto></video>' : '';
+    return '<div class="frame">' + media + '<span class="num">' + String(i + 1).padStart(2, '0') + '</span>' + (p.video ? '' : '<span class="ttl" aria-hidden="true">' + esc(p.name) + '</span>') + '</div>';
+  }
+  document.getElementById('plist').innerHTML = P.map(function (p, i) {
+    return '<a class="pcard" href="#p-' + p.id + '" aria-label="' + esc(p.name) + ' — open project">' + frame(p, i) +
+      '<div class="cap"><span><b>' + esc(p.name) + '</b><small>' + esc(p.role) + '</small></span><span>' + esc(p.year) + '</span></div></a>';
+  }).join('');
+  document.getElementById('pcount').textContent = P.length;
+  document.getElementById('icons2').innerHTML = document.getElementById('icons').innerHTML;
+
+  // Videos (once added) only play while on screen
+  var vio = 'IntersectionObserver' in window ? new IntersectionObserver(function (es) {
+    es.forEach(function (e) { var v = e.target; if (e.isIntersecting) { var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); } else v.pause(); });
+  }, { threshold: .25 }) : null;
+  function watchVideos(root) { root.querySelectorAll('video[data-auto]').forEach(function (v) { v.muted = true; if (vio) vio.observe(v); }); }
+  watchVideos(document);
+
+  // Overlays get their own history step, so the phone's back button closes them first
+  var layer = null;
+  function pushLayer(n) { if (layer) return; layer = n; try { history.pushState({ layer: n }, ''); } catch (e) {} }
+  function dropLayer(n) { if (layer !== n) return; layer = null; if (history.state && history.state.layer === n) history.back(); }
+  window.addEventListener('popstate', function () { if (!layer) return; layer = null; setMenu(false); });
+
+  // Project view: full write-up, tabs only jump
+  var home = document.getElementById('home'), pv = document.getElementById('project'), dv = document.getElementById('docview');
+  var cur = null, jumping = 0;
+  function para(d) {
+    return d.map(function (x) {
+      if (Array.isArray(x)) return '<ul>' + x.map(function (li) { return '<li>' + esc(li) + '</li>'; }).join('') + '</ul>';
+      return '<p>' + esc(x) + '</p>';
+    }).join('');
+  }
+  function mark(t) {
+    ['overview', 'challenge', 'solution'].forEach(function (k) {
+      var b = document.getElementById('t-' + k);
+      if (k === t) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
+    });
+  }
+  ['overview', 'challenge', 'solution'].forEach(function (t) {
+    document.getElementById('t-' + t).addEventListener('click', function () {
+      var el = document.getElementById('s-' + t);
+      if (el) { mark(t); jumping = Date.now(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+  window.addEventListener('scroll', function () {
+    if (pv.hidden || Date.now() - jumping < 800) return;
+    var c = 'overview';
+    ['overview', 'challenge', 'solution'].forEach(function (t) {
+      var el = document.getElementById('s-' + t);
+      if (el && el.getBoundingClientRect().top < 160) c = t;
+    });
+    if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 4) c = 'solution';
+    mark(c);
+  }, { passive: true });
+
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  var homeY = 0;
+  function jump(y) { window.scrollTo({ top: y, left: 0, behavior: 'instant' }); }
+  function only(v) { if (!home.hidden && v !== home) homeY = window.scrollY; [home, pv, dv].forEach(function (m) { m.hidden = m !== v; }); }
+  function route() {
+    var h = (location.hash || '').slice(1);
+    if (h === 'resume') { document.title = 'Resume — Klonex'; only(dv); jump(0); return; }
+    var m = h.indexOf('p-') === 0 ? P.filter(function (p) { return 'p-' + p.id === h; })[0] : null;
+    if (m) {
+      cur = m;
+      document.getElementById('pvframe').innerHTML = frame(m, P.indexOf(m));
+      document.getElementById('pvtitle').textContent = m.name;
+      document.getElementById('pvsub').textContent = m.role + ' · ' + m.client + ' · ' + m.year;
+      var lk = document.getElementById('pvlink');
+      if (m.link) { lk.href = m.link; lk.hidden = false; } else lk.hidden = true;
+      document.getElementById('tp').innerHTML =
+        '<section id="s-overview"><h2>Overview</h2>' + para(m.overview) + '</section>' +
+        '<section id="s-challenge"><h2>Challenge</h2>' + para(m.challenge) + '</section>' +
+        '<section id="s-solution"><h2>Solution</h2>' + para(m.solution) + '</section>';
+      mark('overview'); watchVideos(pv);
+      document.title = m.name + ' — Klonex';
+      only(pv); jump(0); return;
+    }
+    document.title = 'Klonex — Visual & Motion Designer';
+    var wasHidden = home.hidden;
+    only(home);
+    var el = h && document.getElementById(h);
+    if (el) { if (wasHidden) requestAnimationFrame(function () { el.scrollIntoView({ behavior: 'instant', block: 'start' }); }); }
+    else if (wasHidden) requestAnimationFrame(function () { jump(homeY); });
+  }
+  window.addEventListener('hashchange', route);
+  route();
+
+  // Footer wordmark: stretch to the full width
+  function fitBig() {
+    var p = document.getElementById('big'), t = p.firstChild;
+    p.style.fontSize = '100px';
+    var w = t.getBoundingClientRect().width;
+    if (w) p.style.fontSize = (100 * (document.documentElement.clientWidth - 8) / w) + 'px';
+  }
+  fitBig();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitBig);
+  var fr = 0; window.addEventListener('resize', function () { cancelAnimationFrame(fr); fr = requestAnimationFrame(fitBig); });
+
+  // Menu: slides up from the bottom; tap the handle or drag it down to collapse
+  var menu = document.getElementById('menu'), ob = document.getElementById('openMenu'), sheet = document.getElementById('sheet');
+  function setMenu(on) {
+    ob.setAttribute('aria-expanded', on ? 'true' : 'false');
+    document.body.classList.toggle('lock', on); document.body.classList.toggle('menu-on', on);
+    if (on) { pushLayer('menu'); menu.hidden = false; requestAnimationFrame(function () { menu.classList.add('open'); document.getElementById('closeMenu').focus({ preventScroll: true }); }); }
+    else { dropLayer('menu'); menu.classList.remove('open'); setTimeout(function () { if (!menu.classList.contains('open')) menu.hidden = true; }, 440); if (menu.contains(document.activeElement)) ob.focus({ preventScroll: true }); }
+  }
+  ob.addEventListener('click', function () { setMenu(true); });
+  document.getElementById('closeMenu').addEventListener('click', function () { setMenu(false); });
+  document.getElementById('grab').addEventListener('click', function () { setMenu(false); });
+  var dy0 = null, dy = 0, t0 = 0;
+  function dStart(y) { if (sheet.scrollTop > 0) return; dy0 = y; dy = 0; t0 = Date.now(); sheet.classList.add('drag'); }
+  function dMove(y, e) { if (dy0 === null) return; dy = Math.max(0, y - dy0); sheet.style.transform = 'translateY(' + dy + 'px)'; if (dy > 4 && e && e.cancelable) e.preventDefault(); }
+  function dEnd() {
+    if (dy0 === null) return;
+    var fast = dy / Math.max(1, Date.now() - t0) > 0.5;
+    dy0 = null; sheet.classList.remove('drag'); sheet.style.transform = '';
+    if (dy > 90 || (fast && dy > 30)) setMenu(false);
+  }
+  sheet.addEventListener('touchstart', function (e) { dStart(e.touches[0].clientY); }, { passive: true });
+  sheet.addEventListener('touchmove', function (e) { dMove(e.touches[0].clientY, e); }, { passive: false });
+  sheet.addEventListener('touchend', dEnd);
+  sheet.addEventListener('touchcancel', dEnd);
+  menu.querySelectorAll('[data-close]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var href = a.getAttribute('href');
+      if (!href || layer !== 'menu') { setMenu(false); return; }
+      // swap the menu's history step for the destination, so back goes to where you were, not to the menu
+      e.preventDefault(); layer = null; setMenu(false);
+      try { history.replaceState(null, '', href); } catch (er) { location.hash = href; return; }
+      route();
+      var el = document.getElementById(href.slice(1));
+      if (el && !home.hidden) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
+})();
+</script>
+</body>
+</html>
