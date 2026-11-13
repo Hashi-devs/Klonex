@@ -79,17 +79,18 @@ section.blk{padding:84px 0 8px}
 .lede{margin:0 0 24px;color:var(--muted);font-family:'Google Sans Code',ui-monospace,monospace;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
 
 /* work cards: black frames until the videos arrive */
-.plist{display:flex;flex-direction:column;gap:30px}
-.pcard{display:block;text-decoration:none;color:var(--fg)}
-.frame{position:relative;border-radius:16px;overflow:hidden;background:#000;aspect-ratio:16/10;border:1px solid var(--line);transition:transform .35s ease}
+.plist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
+.pcol{display:flex;flex-direction:column;gap:22px;min-width:0}
+.pcard{display:block;text-decoration:none;color:var(--fg);min-width:0}
+.frame{position:relative;border-radius:14px;overflow:hidden;background:#000;aspect-ratio:16/10;border:1px solid var(--line);transition:transform .35s ease}
 .pcard:hover .frame{transform:scale(.985)}
 .frame video,.frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.frame .num{position:absolute;left:14px;top:12px;font-family:'Google Sans Code',ui-monospace,monospace;font-size:12px;color:#4a4a4e;letter-spacing:.08em}
-.frame .ttl{position:absolute;left:14px;right:14px;bottom:12px;font-family:'Google Sans Code',ui-monospace,monospace;font-size:clamp(22px,6vw,40px);font-weight:600;letter-spacing:-.05em;line-height:1;color:#1f1f22}
-.cap{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-top:12px}
-.cap b{font-family:'Google Sans Code',ui-monospace,monospace;font-weight:500;font-size:18px;letter-spacing:-.02em}
-.cap small{display:block;color:var(--muted);font-size:14px;margin-top:2px}
-.cap span:last-child{color:var(--muted);font-size:14px;white-space:nowrap}
+.frame .num{position:absolute;left:12px;top:10px;font-family:'Google Sans Code',ui-monospace,monospace;font-size:11px;color:#4a4a4e;letter-spacing:.08em}
+.frame .ttl{position:absolute;left:12px;right:12px;bottom:10px;font-family:'Google Sans Code',ui-monospace,monospace;font-size:clamp(15px,4.4vw,34px);font-weight:600;letter-spacing:-.05em;line-height:1;color:#1f1f22}
+.cap{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;margin-top:9px;font-size:13px}
+.cap b{font-family:'Google Sans Code',ui-monospace,monospace;font-weight:500;font-size:13px;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.cap .y{color:var(--muted);white-space:nowrap}
+.cap .r{color:var(--muted);flex-basis:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* experience */
 .xl{border-top:1px solid var(--line)}
@@ -156,11 +157,11 @@ section.blk{padding:84px 0 8px}
   .reel{margin-top:48px}
   section.blk{padding:112px 0 8px}
   .sh{font-size:40px}
-  .plist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px 24px}
-  .plist .pcard:first-child{grid-column:1/-1}
-  .plist .pcard:first-child .frame{aspect-ratio:16/8}
-  .plist .pcard:last-child:nth-child(even){grid-column:1/-1}
-  .plist .pcard:last-child:nth-child(even) .frame{aspect-ratio:16/8}
+  .plist{gap:16px}
+  .pcol{gap:30px}
+  .cap{font-size:14px;flex-wrap:nowrap}
+  .cap b{font-size:14px}
+  .cap .r{flex-basis:auto;margin-left:auto;text-align:right}
   .ts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 48px}
   .ts h3{grid-row:1}
   .ts p{grid-row:2}
@@ -332,10 +333,16 @@ section.blk{padding:84px 0 8px}
     var media = p.video ? '<video src="' + esc(p.video) + '"' + (p.poster ? ' poster="' + esc(p.poster) + '"' : '') + ' muted loop playsinline preload="none" data-auto></video>' : '';
     return '<div class="frame">' + media + '<span class="num">' + String(i + 1).padStart(2, '0') + '</span>' + (p.video ? '' : '<span class="ttl" aria-hidden="true">' + esc(p.name) + '</span>') + '</div>';
   }
-  document.getElementById('plist').innerHTML = P.map(function (p, i) {
-    return '<a class="pcard" href="#p-' + p.id + '" aria-label="' + esc(p.name) + ' — open project">' + frame(p, i) +
-      '<div class="cap"><span><b>' + esc(p.name) + '</b><small>' + esc(p.role) + '</small></span><span>' + esc(p.year) + '</span></div></a>';
-  }).join('');
+  // Two staggered columns: alternate frame shapes so the columns interlock instead of lining up in rows
+  var SHAPES = ['4/3.4', '16/10', '16/10', '4/3.6', '16/11', '4/3.2', '16/10', '4/3.4'];
+  function card(p, i) {
+    return '<a class="pcard" href="#p-' + p.id + '" aria-label="' + esc(p.name) + ' — open project">' +
+      frame(p, i).replace('<div class="frame">', '<div class="frame" style="aspect-ratio:' + SHAPES[i % SHAPES.length] + '">') +
+      '<div class="cap"><b>' + esc(p.name) + '</b><span class="y">© ' + esc(p.year.slice(0, 4)) + '</span><span class="r">' + esc(p.role) + '</span></div></a>';
+  }
+  var cols = ['', ''];
+  P.forEach(function (p, i) { cols[i % 2] += card(p, i); });
+  document.getElementById('plist').innerHTML = '<div class="pcol">' + cols[0] + '</div><div class="pcol">' + cols[1] + '</div>';
   document.getElementById('pcount').textContent = P.length;
   document.getElementById('icons2').innerHTML = document.getElementById('icons').innerHTML;
 
