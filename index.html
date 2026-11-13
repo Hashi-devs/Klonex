@@ -70,7 +70,13 @@ body.menu-on .hdr{opacity:0;pointer-events:none}
 .reel .play{position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;border:1px solid #333336;display:flex;align-items:center;justify-content:center;color:#f2f2f0;text-decoration:none;transition:transform .25s ease,border-color .25s ease}
 .reel .play:hover{transform:scale(1.06);border-color:var(--acc)}
 .reel .play svg{width:22px;height:22px;fill:currentColor;margin-left:3px}
-.pill{position:absolute;right:12px;bottom:12px;display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 16px;border-radius:999px;background:var(--acc);color:#fff;text-decoration:none;font-family:'Google Sans Code',ui-monospace,monospace;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.ctl{position:absolute;right:12px;bottom:12px;display:flex;align-items:center;gap:8px}
+.pp{width:40px;height:40px;border-radius:50%;border:0;background:rgba(20,20,22,.8);color:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.pp svg{width:16px;height:16px;fill:currentColor}
+.reel.live .play,.reel.live .lbl{display:none}
+.reel video{opacity:0;transition:opacity .5s ease}
+.reel.live video{opacity:1}
+.pill{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 16px;border-radius:999px;background:var(--acc);color:#fff;text-decoration:none;font-family:'Google Sans Code',ui-monospace,monospace;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
 .pill:hover{background:#ff5246}
 
 /* sections */
@@ -206,10 +212,10 @@ section.blk{padding:84px 0 8px}
     </section>
 
     <div class="reel" id="reel" aria-label="Showreel">
-      <!-- Showreel video goes here: <video src="media/showreel.mp4" poster="media/showreel.jpg" autoplay muted loop playsinline></video> -->
+      <video id="rv" muted loop playsinline preload="auto" data-src="media/showreel.mp4" aria-label="Klonex showreel 2026"></video>
       <span class="lbl">Showreel 2026</span>
       <a class="play" href="https://x.com/klonex_/status/2121254529178173736" rel="noopener" aria-label="Play the showreel on X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"></path></svg></a>
-      <a class="pill" href="https://x.com/klonex_/status/2121254529178173736" rel="noopener">Watch full reel ↗</a>
+      <div class="ctl"><button class="pp" id="pp" aria-label="Pause showreel" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"></path></svg></button><a class="pill" href="https://x.com/klonex_/status/2121254529178173736" rel="noopener">Watch full reel ↗</a></div>
     </div>
 
     <section class="blk" id="work" aria-labelledby="work-h">
@@ -341,6 +347,25 @@ section.blk{padding:84px 0 8px}
   document.getElementById('plist').innerHTML = '<div class="pcol">' + cols[0] + '</div><div class="pcol">' + cols[1] + '</div>';
   document.getElementById('pcount').textContent = P.length;
   document.getElementById('icons2').innerHTML = document.getElementById('icons').innerHTML;
+
+  // Showreel: plays on open (muted, looping) once media/showreel.mp4 is in the repo; until then the frame stays black
+  (function () {
+    var box = document.getElementById('reel'), v = document.getElementById('rv'), pp = document.getElementById('pp'), user = false;
+    var conn = navigator.connection || {};
+    if (!v || conn.saveData) return;
+    var PAUSE = pp.innerHTML, PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"></path></svg>';
+    function go() { var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); }
+    v.muted = true;
+    v.addEventListener('loadeddata', function () { box.classList.add('live'); pp.hidden = false; go(); });
+    v.addEventListener('error', function () { v.remove(); });
+    v.src = v.getAttribute('data-src');
+    pp.addEventListener('click', function () {
+      if (v.paused) { user = false; go(); pp.innerHTML = PAUSE; pp.setAttribute('aria-label', 'Pause showreel'); }
+      else { user = true; v.pause(); pp.innerHTML = PLAY; pp.setAttribute('aria-label', 'Play showreel'); }
+    });
+    // pause when scrolled away or the tab is hidden, resume when back (unless paused by hand)
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { if (!box.classList.contains('live')) return; if (es[0].isIntersecting && !user && !document.hidden) go(); else v.pause(); }, { threshold: .2 }).observe(box);
+  })();
 
   // Videos (once added) only play while on screen
   var vio = 'IntersectionObserver' in window ? new IntersectionObserver(function (es) {
