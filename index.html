@@ -45,8 +45,8 @@ h1,h2,h3,.cap b,.xr .co,.frame .ttl{text-transform:uppercase}
 .menu.show .scrim{opacity:1}
 .menu.show .sheet{transform:none}
 .sheet .row{display:grid;grid-template-columns:44px 1fr auto;align-items:center}
-.menu nav{display:flex;flex-direction:column;max-width:680px;margin:6px auto 0}
-.menu nav a{font-family:'Google Sans Code',ui-monospace,monospace;font-size:clamp(44px,13vw,84px);font-weight:500;letter-spacing:-.04em;line-height:1;text-decoration:none;color:#77777a;padding:14px 4px 18px;border-bottom:1px solid var(--line)}
+.menu nav{display:flex;flex-direction:column;margin:6px 0 0}
+.menu nav a{font-family:'Google Sans Code',ui-monospace,monospace;font-size:clamp(60px,18vw,120px);font-weight:500;letter-spacing:-.06em;line-height:1;text-decoration:none;color:#77777a;padding:14px 4px 18px;border-bottom:1px solid var(--line)}
 .menu nav a:last-child{border-bottom:0}
 .menu nav a:hover,.menu nav a:focus-visible{color:var(--fg)}
 body.lock{overflow:hidden}
@@ -83,6 +83,9 @@ body.menu-on .hdr{opacity:0;pointer-events:none}
 section.blk{padding:84px 0 8px}
 .sh{font-size:28px;letter-spacing:-.04em;margin:0 0 8px;display:flex;align-items:baseline;gap:10px}
 .sh .n{font-size:15px;color:var(--soft);letter-spacing:0}
+.more{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;margin:34px auto 0;max-width:280px;border:1px solid var(--line);border-radius:999px;text-decoration:none;font-family:'Google Sans Code',ui-monospace,monospace;font-size:14px;letter-spacing:.1em;text-transform:uppercase;transition:border-color .2s ease,color .2s ease}
+.more:hover{border-color:var(--acc);color:var(--acc)}
+.new{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:999px;background:var(--acc);color:#fff;font-size:10px;letter-spacing:.06em;vertical-align:1px}
 .lede{margin:0 0 24px;color:var(--muted);font-family:'Google Sans Code',ui-monospace,monospace;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
 
 /* work cards: black frames until the videos arrive */
@@ -222,6 +225,7 @@ section.blk{padding:84px 0 8px}
       <h2 class="sh" id="work-h">Selected work <span class="n" id="pcount"></span></h2>
       <p class="lede">30+ brands · Web2 &amp; Web3 · Concept to final render</p>
       <div class="plist" id="plist"></div>
+      <a class="more" href="#all-work">See more ↗</a>
     </section>
 
     <section class="blk" id="experience" aria-labelledby="exp-h">
@@ -252,9 +256,18 @@ section.blk{padding:84px 0 8px}
   </div>
 </main>
 
+<main id="allwork" hidden>
+  <div class="wrap pv">
+    <a class="back" href="#work" aria-label="Back to selected work"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg></a>
+    <h1>All work <span class="n" id="acount" style="font-size:16px;color:var(--soft);letter-spacing:0"></span></h1>
+    <p class="lede" style="margin-top:8px">Launches, explainers and brand motion · Web2 &amp; Web3</p>
+    <div class="plist" id="alist"></div>
+  </div>
+</main>
+
 <main id="project" hidden>
   <div class="wrap pv">
-    <a class="back" href="#work" aria-label="Back to work"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg></a>
+    <a class="back" id="pvback" href="#work" aria-label="Back to work"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg></a>
     <div id="pvframe" style="margin-top:14px"></div>
     <h1 id="pvtitle"></h1>
     <div class="meta"><span id="pvsub"></span><a class="visit" id="pvlink" href="#" rel="noopener" hidden>Visit ↗</a></div>
@@ -330,6 +343,14 @@ section.blk{padding:84px 0 8px}
       solution: [['Campaign graphics and motion videos for brand and event comms.', 'Delivered across the festival cycle.']] }
   ];
 
+  // Everything from his previous site, plus the CV projects above. Entries with an id open their write-up.
+  var ALL = [
+    { name: 'BREED' }, { ref: 'the-big-8' }, { ref: 'blockfest-africa' }, { name: 'CLI' }, { name: 'Prediction Markets' },
+    { name: 'Godark' }, { name: 'Sanctum' }, { name: 'Combinder' }, { name: 'Rabby Wallet' }, { name: '3WB Club' },
+    { name: 'Adxpot V1' }, { name: 'Adxpot V2' }, { name: 'BlaBla Protocol' }, { name: 'BlaBla Launch', isNew: true },
+    { ref: 'zerocard' }, { ref: 'nirvana-academy' }, { ref: 'venturemind-ai' }, { ref: 'technova-summit' }
+  ];
+
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function frame(p, i) {
     var media = p.video ? '<video src="' + esc(p.video) + '"' + (p.poster ? ' poster="' + esc(p.poster) + '"' : '') + ' muted loop playsinline preload="none" data-auto></video>' : '';
@@ -342,11 +363,20 @@ section.blk{padding:84px 0 8px}
       frame(p, i).replace('<div class="frame">', '<div class="frame" style="aspect-ratio:' + SHAPES[i % SHAPES.length] + '">') +
       '<div class="cap"><span class="y">' + esc(p.year.slice(0, 4)) + '</span><b>' + esc(p.name) + '</b></div></a>';
   }
-  var cols = ['', ''];
-  P.forEach(function (p, i) { cols[i % 2] += card(p, i); });
-  document.getElementById('plist').innerHTML = '<div class="pcol">' + cols[0] + '</div><div class="pcol">' + cols[1] + '</div>';
+  function twoCols(html) { var c = ['', '']; html.forEach(function (h, i) { c[i % 2] += h; }); return '<div class="pcol">' + c[0] + '</div><div class="pcol">' + c[1] + '</div>'; }
+  document.getElementById('plist').innerHTML = twoCols(P.map(card));
+  var allBuilt = false;
+  function buildAll() {
+    if (allBuilt) return; allBuilt = true;
+    document.getElementById('alist').innerHTML = twoCols(ALL.map(function (a, i) {
+      var p = a.ref ? P.filter(function (x) { return x.id === a.ref; })[0] : null;
+      if (p) return card(p, i);
+      var f = frame({ name: a.name }, i).replace('<div class="frame">', '<div class="frame" style="aspect-ratio:' + SHAPES[i % SHAPES.length] + '">');
+      return '<div class="pcard">' + f + '<div class="cap"><span class="y"></span><b>' + esc(a.name) + (a.isNew ? '<span class="new">NEW</span>' : '') + '</b></div></div>';
+    }));
+    document.getElementById('acount').textContent = ALL.length;
+  }
   document.getElementById('pcount').textContent = P.length;
-  document.getElementById('icons2').innerHTML = document.getElementById('icons').innerHTML;
 
   // Showreel: plays on open (muted, looping) once media/showreel.mp4 is in the repo; until then the frame stays black
   (function () {
@@ -381,7 +411,7 @@ section.blk{padding:84px 0 8px}
   window.addEventListener('popstate', function () { if (!layer) return; layer = null; setMenu(false); });
 
   // Project view: full write-up, tabs only jump
-  var home = document.getElementById('home'), pv = document.getElementById('project'), dv = document.getElementById('docview');
+  var home = document.getElementById('home'), pv = document.getElementById('project'), dv = document.getElementById('docview'), av = document.getElementById('allwork');
   var cur = null, jumping = 0;
   function para(d) {
     return d.map(function (x) {
@@ -413,12 +443,13 @@ section.blk{padding:84px 0 8px}
   }, { passive: true });
 
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-  var homeY = 0;
+  var homeY = 0, from = 'work';
   function jump(y) { window.scrollTo({ top: y, left: 0, behavior: 'instant' }); }
-  function only(v) { if (!home.hidden && v !== home) homeY = window.scrollY; [home, pv, dv].forEach(function (m) { m.hidden = m !== v; }); }
+  function only(v) { if (!home.hidden && v !== home) homeY = window.scrollY; [home, pv, dv, av].forEach(function (m) { m.hidden = m !== v; }); }
   function route() {
     var h = (location.hash || '').slice(1);
     if (h === 'resume') { document.title = 'Resume — Klonex'; only(dv); jump(0); return; }
+    if (h === 'all-work') { from = 'all-work'; buildAll(); document.title = 'All work — Klonex'; only(av); jump(0); return; }
     var m = h.indexOf('p-') === 0 ? P.filter(function (p) { return 'p-' + p.id === h; })[0] : null;
     if (m) {
       cur = m;
@@ -432,10 +463,12 @@ section.blk{padding:84px 0 8px}
         '<section id="s-challenge"><h2>Challenge</h2>' + para(m.challenge) + '</section>' +
         '<section id="s-solution"><h2>Solution</h2>' + para(m.solution) + '</section>';
       mark('overview'); watchVideos(pv);
+      document.getElementById('pvback').href = '#' + from;
       document.title = m.name + ' — Klonex';
       only(pv); jump(0); return;
     }
     document.title = 'Klonex — Visual & Motion Designer';
+    from = 'work';
     var wasHidden = home.hidden;
     only(home);
     var el = h && document.getElementById(h);
