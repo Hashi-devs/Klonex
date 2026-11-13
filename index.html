@@ -156,6 +156,12 @@ section.blk{padding:84px 0 8px}
 .pages img{display:block;width:100%;height:auto;border-radius:10px;background:#fff;box-shadow:0 18px 50px rgba(0,0,0,.45)}
 .dl{margin:22px 0 0}
 
+@media (max-width:600px){
+  .ctl{right:8px;bottom:8px;gap:6px}
+  .pp{width:32px;height:32px}
+  .pp svg{width:13px;height:13px}
+  .pill{min-height:32px;padding:0 12px;font-size:11px;gap:6px}
+}
 @media (min-width:900px){
   .wrap{max-width:1120px;padding:0 40px}
   .hdr{padding:10px 40px}
@@ -215,10 +221,10 @@ section.blk{padding:84px 0 8px}
     </section>
 
     <div class="reel" id="reel" aria-label="Showreel">
-      <video id="rv" muted loop playsinline preload="auto" data-src="media/showreel.mp4" aria-label="Klonex showreel 2026"></video>
+      <video id="rv" muted loop playsinline preload="auto" poster="media/showreel.jpg" data-src="media/showreel.mp4" aria-label="Klonex showreel 2026"></video>
       <span class="lbl">Showreel 2026</span>
       <a class="play" href="https://x.com/klonex_/status/2121254529178173736" rel="noopener" aria-label="Play the showreel on X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"></path></svg></a>
-      <div class="ctl"><button class="pp" id="pp" aria-label="Pause showreel" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"></path></svg></button><a class="pill" href="https://x.com/klonex_/status/2121254529178173736" rel="noopener">Watch full reel ↗</a></div>
+      <div class="ctl"><button class="pp" id="pp" aria-label="Pause showreel" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"></path></svg></button><a class="pill" id="full" href="https://x.com/klonex_/status/2121254529178173736" rel="noopener">Watch full reel ↗</a></div>
     </div>
 
     <section class="blk" id="work" aria-labelledby="work-h">
@@ -393,6 +399,21 @@ section.blk{padding:84px 0 8px}
       if (v.paused) { user = false; go(); pp.innerHTML = PAUSE; pp.setAttribute('aria-label', 'Pause showreel'); }
       else { user = true; v.pause(); pp.innerHTML = PLAY; pp.setAttribute('aria-label', 'Play showreel'); }
     });
+    // Watch full reel: from the start, with sound, full screen; back to the silent loop afterwards
+    var full = document.getElementById('full');
+    function quiet() { v.muted = true; v.controls = false; v.loop = true; }
+    full.addEventListener('click', function (e) {
+      if (!box.classList.contains('live')) return; // no video yet: open the post on X
+      e.preventDefault(); user = false;
+      v.currentTime = 0; v.muted = false; v.controls = true; go();
+      pp.innerHTML = PAUSE; pp.setAttribute('aria-label', 'Pause showreel');
+      var fs = v.requestFullscreen || v.webkitRequestFullscreen;
+      if (fs) { var r = fs.call(v); if (r && r.catch) r.catch(function () {}); } else if (v.webkitEnterFullscreen) v.webkitEnterFullscreen();
+    });
+    document.addEventListener('fullscreenchange', function () { if (!document.fullscreenElement) quiet(); });
+    document.addEventListener('webkitfullscreenchange', function () { if (!document.webkitFullscreenElement) quiet(); });
+    v.addEventListener('webkitendfullscreen', quiet);
+
     // pause when scrolled away or the tab is hidden, resume when back (unless paused by hand)
     if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { if (!box.classList.contains('live')) return; if (es[0].isIntersecting && !user && !document.hidden) go(); else v.pause(); }, { threshold: .2 }).observe(box);
   })();
