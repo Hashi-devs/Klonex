@@ -93,6 +93,8 @@ section.blk{padding:84px 0 8px}
 .more{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;margin:34px auto 0;max-width:280px;text-decoration:none;font-family:'Google Sans Code',ui-monospace,monospace;font-size:14px;letter-spacing:.1em;text-transform:uppercase;transition:color .2s ease}
 .more:hover{color:var(--acc)}
 .new{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:999px;background:var(--acc);color:#fff;font-size:10px;letter-spacing:.06em;vertical-align:1px}
+.dt::before{content:'';display:inline-block;width:.32em;height:.32em;min-width:8px;min-height:8px;border-radius:50%;background:var(--acc);margin-right:.45em;vertical-align:.22em}
+.sh.dt{display:block}
 .lede{margin:0 0 24px;color:var(--muted);font-family:'Google Sans Code',ui-monospace,monospace;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
 
 /* work cards: black frames until the videos arrive */
@@ -123,7 +125,7 @@ section.blk{padding:84px 0 8px}
 /* skills & tools */
 .ts h3{font-size:20px;letter-spacing:-.03em;margin:0 0 10px}
 .ts p{margin:0 0 30px;color:var(--muted);font-size:17px;line-height:1.7}
-.ts p .d{color:var(--soft);padding:0 6px}
+.ts p .d{color:var(--soft);padding:0 2px}
 
 /* video player */
 .frame video~.num{color:rgba(255,255,255,.75);text-shadow:0 1px 3px rgba(0,0,0,.6)}
@@ -247,14 +249,14 @@ section.blk{padding:84px 0 8px}
     </div>
 
     <section class="blk" id="work" aria-labelledby="work-h">
-      <h2 class="sh" id="work-h">Selected work <span class="n" id="pcount"></span></h2>
-      <p class="lede">30+ brands · Web2 &amp; Web3 · Concept to final render</p>
+      <h2 class="sh" id="work-h">Selected projects</h2>
+      <p class="lede">14+ projects · 10+ clients · 10M+ views generated</p>
       <div class="plist" id="plist"></div>
       <a class="more" href="#all-work">See more ↗</a>
     </section>
 
     <section class="blk" id="experience" aria-labelledby="exp-h">
-      <h2 class="sh" id="exp-h">Experience</h2>
+      <h2 class="sh dt" id="exp-h">Experience</h2>
       <div class="xl" style="margin-top:22px">
         <div class="xr"><div><span class="co">Nirvana Academy</span><span class="rl">Motion Designer</span></div><span class="yr">Sep 2025 — Present</span></div>
         <div class="xr"><div><span class="co">Freelance</span><span class="rl">Motion Designer</span></div><span class="yr">Sep 2025 — Present</span></div>
@@ -265,7 +267,7 @@ section.blk{padding:84px 0 8px}
         <div class="xr"><div><span class="co">GDG LASU</span><span class="rl">Graphic &amp; Motion Designer</span></div><span class="yr">Oct 2023 — Jul 2024</span></div>
         <div class="xr"><div><span class="co">Self-employed</span><span class="rl">Graphic Designer</span></div><span class="yr">Dec 2022 — Jun 2023</span></div>
       </div>
-      <p class="sub">Community</p>
+      <p class="sub dt">Community</p>
       <div class="xl">
         <div class="xr"><div><span class="co">Blockfest Africa</span><span class="rl">Visual &amp; Motion Designer</span></div><span class="yr">Sep 2025 — Present</span></div>
         <div class="xr"><div><span class="co">TechNova Summit</span><span class="rl">Motion Designer</span></div><span class="yr">Jan 2026 — Present</span></div>
@@ -273,10 +275,10 @@ section.blk{padding:84px 0 8px}
     </section>
 
     <section class="blk ts" id="skills" aria-label="Skills and tools">
-      <h3>Tools</h3>
-      <p>After Effects<span class="d">·</span>Blender<span class="d">·</span>Cavalry<span class="d">·</span>DaVinci Resolve &amp; Fusion<span class="d">·</span>Photoshop<span class="d">·</span>Figma<span class="d">·</span>Lottie / Bodymovin<span class="d">·</span>Jitter<span class="d">·</span>Rive</p>
-      <h3>Skills</h3>
-      <p>Motion Design<span class="d">·</span>Animation<span class="d">·</span>3D<span class="d">·</span>Illustration<span class="d">·</span>Video Editing<span class="d">·</span>Brand Identity<span class="d">·</span>Logo Design<span class="d">·</span>Graphic Design<span class="d">·</span>UI/UX Design<span class="d">·</span>Website Design &amp; Build</p>
+      <h3 class="dt">Tools</h3>
+      <p>After Effects&nbsp;<span class="d">·</span> Blender&nbsp;<span class="d">·</span> Cavalry&nbsp;<span class="d">·</span> DaVinci Resolve &amp; Fusion&nbsp;<span class="d">·</span> Photoshop&nbsp;<span class="d">·</span> Figma&nbsp;<span class="d">·</span> Lottie / Bodymovin&nbsp;<span class="d">·</span> Jitter&nbsp;<span class="d">·</span> Rive</p>
+      <h3 class="dt">Skills</h3>
+      <p>Motion Design&nbsp;<span class="d">·</span> Animation&nbsp;<span class="d">·</span> 3D&nbsp;<span class="d">·</span> Illustration&nbsp;<span class="d">·</span> Video Editing&nbsp;<span class="d">·</span> Brand Identity&nbsp;<span class="d">·</span> Logo Design&nbsp;<span class="d">·</span> Graphic Design&nbsp;<span class="d">·</span> UI/UX Design&nbsp;<span class="d">·</span> Website Design &amp; Build</p>
     </section>
   </div>
 </main>
@@ -391,7 +393,6 @@ section.blk{padding:84px 0 8px}
   }
   function twoCols(html) { var c = ['', '']; html.forEach(function (h, i) { c[i % 2] += h; }); return '<div class="pcol">' + c[0] + '</div><div class="pcol">' + c[1] + '</div>'; }
   document.getElementById('plist').innerHTML = twoCols(ALL.slice(0, SELECTED).map(card));
-  document.getElementById('pcount').textContent = SELECTED;
   var allBuilt = false;
   function buildAll() {
     if (allBuilt) return; allBuilt = true;
