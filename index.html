@@ -122,6 +122,14 @@ section.blk{padding:84px 0 8px}
 .ts p{margin:0 0 30px;color:var(--muted);font-size:17px;line-height:1.7}
 .ts p .d{color:var(--soft);padding:0 6px}
 
+/* video player */
+.frame video~.num{color:rgba(255,255,255,.75);text-shadow:0 1px 3px rgba(0,0,0,.6)}
+.pbtn{background:none;border:0;padding:0;font:inherit;text-align:left;cursor:pointer;width:100%}
+.player{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;opacity:0;transition:opacity .25s ease}
+.player.show{opacity:1}
+.player video{width:100%;max-width:1200px;max-height:calc(100vh - 120px);border-radius:12px;background:#000}
+.pbar{width:100%;max-width:1200px;display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-family:'Google Sans Code',ui-monospace,monospace;text-transform:uppercase;font-size:14px;letter-spacing:.04em}
+
 /* footer */
 .foot{margin-top:96px;border-top:1px solid var(--line);padding:84px 0 calc(28px + env(safe-area-inset-bottom));text-align:center}
 .avail2{display:inline-flex;align-items:center;gap:10px;margin:0 0 18px;font-family:'Google Sans Code',ui-monospace,monospace;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
@@ -311,6 +319,11 @@ section.blk{padding:84px 0 8px}
   </div>
 </main>
 
+<div class="player" id="player" hidden role="dialog" aria-modal="true" aria-label="Video">
+  <video id="pvid" controls playsinline></video>
+  <div class="pbar"><span id="pname"></span><button class="iconbtn" id="pclose" aria-label="Close video"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></div>
+</div>
+
 <footer class="foot" id="contact">
   <div class="wrap">
     <p class="avail2"><i aria-hidden="true"></i>Available for new works</p>
@@ -342,10 +355,18 @@ section.blk{padding:84px 0 8px}
 
   // His 14 pieces, in his order. Entries with ref open their write-up; add video: 'media/name.mp4' (and poster) to fill a frame.
   var ALL = [
-    { name: 'BREED' }, { ref: 'the-big-8' }, { ref: 'blockfest-africa' }, { name: 'CLI' }, { name: 'Prediction Markets' },
-    { name: 'Godark' }, { name: 'Sanctum' }, { name: 'Combinder' }, { name: 'Rabby Wallet' }, { name: '3WB Club' },
-    { name: 'Adxpot V1' }, { name: 'Adxpot V2' }, { name: 'BlaBla Protocol' }, { name: 'BlaBla Launch', isNew: true }
+    { name: 'BREED', v: 'breed' }, { ref: 'the-big-8', v: 'the-big-8' }, { ref: 'blockfest-africa', v: 'blockfest-africa' },
+    { name: 'CLI', v: 'cli' }, { name: 'Prediction Markets', v: 'prediction-markets' }, { name: 'Godark', v: 'godark' },
+    { name: 'Sanctum', v: 'sanctum' }, { name: 'Combinder', v: 'combinder' }, { name: 'Rabby Wallet', v: 'rabby-wallet' },
+    { name: '3WB Club', v: '3wb-club' }, { name: 'Adxpot V1', v: 'adxpot-v1' }, { name: 'Adxpot V2', v: 'adxpot-v2' },
+    { name: 'BlaBla Protocol', v: 'blabla-protocol' }, { name: 'BlaBla Launch', v: 'blabla-launch', isNew: true }
   ];
+  // each piece: a short silent loop for its card, a poster, and the full video with sound (loaded only when played)
+  ALL.forEach(function (a) {
+    var m = { video: 'media/w/' + a.v + '-p.mp4', poster: 'media/w/' + a.v + '.jpg', full: 'media/w/' + a.v + '.mp4' };
+    if (a.ref) { var p = P.filter(function (x) { return x.id === a.ref; })[0]; p.video = m.video; p.poster = m.poster; p.full = m.full; }
+    else { a.video = m.video; a.poster = m.poster; a.full = m.full; }
+  });
   var SELECTED = 6; // the home page shows the first six
 
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
@@ -360,7 +381,8 @@ section.blk{padding:84px 0 8px}
     var item = p || a, year = p ? p.year.slice(0, 4) : (a.year || '');
     var f = frame(item, i).replace('<div class="frame">', '<div class="frame" style="aspect-ratio:' + SHAPES[i % SHAPES.length] + '">');
     var cap = '<div class="cap"><span class="y">' + esc(year) + '</span><b>' + esc(item.name) + (a.isNew ? '<span class="new">NEW</span>' : '') + '</b></div>';
-    return p ? '<a class="pcard" href="#p-' + p.id + '" aria-label="' + esc(p.name) + ' — open project">' + f + cap + '</a>' : '<div class="pcard">' + f + cap + '</div>';
+    return p ? '<a class="pcard" href="#p-' + p.id + '" aria-label="' + esc(p.name) + ' — open project">' + f + cap + '</a>'
+      : '<button class="pcard pbtn" data-full="' + esc(a.full) + '" data-poster="' + esc(a.poster) + '" data-name="' + esc(a.name) + '" aria-label="Play ' + esc(a.name) + '">' + f + cap + '</button>';
   }
   function twoCols(html) { var c = ['', '']; html.forEach(function (h, i) { c[i % 2] += h; }); return '<div class="pcol">' + c[0] + '</div><div class="pcol">' + c[1] + '</div>'; }
   document.getElementById('plist').innerHTML = twoCols(ALL.slice(0, SELECTED).map(card));
@@ -418,7 +440,30 @@ section.blk{padding:84px 0 8px}
   var layer = null;
   function pushLayer(n) { if (layer) return; layer = n; try { history.pushState({ layer: n }, ''); } catch (e) {} }
   function dropLayer(n) { if (layer !== n) return; layer = null; if (history.state && history.state.layer === n) history.back(); }
-  window.addEventListener('popstate', function () { if (!layer) return; layer = null; setMenu(false); });
+  window.addEventListener('popstate', function () { if (!layer) return; var n = layer; layer = null; if (n === 'player') closePlayer(); else setMenu(false); });
+
+  // Player: tap a piece to watch it in full, with sound
+  var player = document.getElementById('player'), pvid = document.getElementById('pvid'), popener = null;
+  function openPlayer(btn) {
+    popener = btn;
+    pvid.poster = btn.getAttribute('data-poster'); pvid.src = btn.getAttribute('data-full');
+    document.getElementById('pname').textContent = btn.getAttribute('data-name');
+    player.hidden = false; document.body.classList.add('lock'); pushLayer('player');
+    requestAnimationFrame(function () { player.classList.add('show'); document.getElementById('pclose').focus({ preventScroll: true }); });
+    var pr = pvid.play(); if (pr && pr.catch) pr.catch(function () {});
+  }
+  function closePlayer() {
+    if (player.hidden) return;
+    dropLayer('player');
+    pvid.pause(); pvid.removeAttribute('src'); pvid.load();
+    player.classList.remove('show'); document.body.classList.remove('lock');
+    setTimeout(function () { player.hidden = true; }, 250);
+    if (popener) popener.focus({ preventScroll: true });
+  }
+  document.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('.pbtn'); if (b) openPlayer(b); });
+  document.getElementById('pclose').addEventListener('click', closePlayer);
+  player.addEventListener('click', function (e) { if (e.target === player) closePlayer(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePlayer(); });
 
   // Project view: full write-up, tabs only jump
   var home = document.getElementById('home'), pv = document.getElementById('project'), dv = document.getElementById('docview'), av = document.getElementById('allwork');
@@ -463,7 +508,7 @@ section.blk{padding:84px 0 8px}
     var m = h.indexOf('p-') === 0 ? P.filter(function (p) { return 'p-' + p.id === h; })[0] : null;
     if (m) {
       cur = m;
-      document.getElementById('pvframe').innerHTML = frame(m, ALL.map(function (a) { return a.ref; }).indexOf(m.id));
+      document.getElementById('pvframe').innerHTML = m.full ? '<div class="frame" style="aspect-ratio:16/9"><video src="' + esc(m.full) + '" poster="' + esc(m.poster) + '" controls playsinline preload="metadata"></video></div>' : frame(m, ALL.map(function (a) { return a.ref; }).indexOf(m.id));
       document.getElementById('pvtitle').textContent = m.name;
       document.getElementById('pvsub').textContent = m.role + ' · ' + m.client + ' · ' + m.year;
       var lk = document.getElementById('pvlink');
