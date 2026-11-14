@@ -93,7 +93,7 @@ section.blk{padding:84px 0 8px}
 .more{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;margin:34px auto 0;max-width:280px;text-decoration:none;font-family:'Google Sans Code',ui-monospace,monospace;font-size:14px;letter-spacing:.1em;text-transform:uppercase;transition:color .2s ease}
 .more:hover{color:var(--acc)}
 .new{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:999px;background:var(--acc);color:#fff;font-size:10px;letter-spacing:.06em;vertical-align:1px}
-.dt::before{content:'';display:inline-block;width:.32em;height:.32em;min-width:8px;min-height:8px;border-radius:50%;background:var(--acc);margin-right:.45em;vertical-align:.22em}
+.dt::before{content:'';display:inline-block;width:.32em;height:.32em;min-width:8px;min-height:8px;border-radius:50%;background:var(--dot,var(--acc));margin-right:.45em;vertical-align:.22em}
 .sh.dt{display:block}
 .lede{margin:0 0 24px;color:var(--muted);font-family:'Google Sans Code',ui-monospace,monospace;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
 
@@ -267,7 +267,7 @@ section.blk{padding:84px 0 8px}
         <div class="xr"><div><span class="co">GDG LASU</span><span class="rl">Graphic &amp; Motion Designer</span></div><span class="yr">Oct 2023 — Jul 2024</span></div>
         <div class="xr"><div><span class="co">Self-employed</span><span class="rl">Graphic Designer</span></div><span class="yr">Dec 2022 — Jun 2023</span></div>
       </div>
-      <p class="sub dt">Community</p>
+      <p class="sub">Community</p>
       <div class="xl">
         <div class="xr"><div><span class="co">Blockfest Africa</span><span class="rl">Visual &amp; Motion Designer</span></div><span class="yr">Sep 2025 — Present</span></div>
         <div class="xr"><div><span class="co">TechNova Summit</span><span class="rl">Motion Designer</span></div><span class="yr">Jan 2026 — Present</span></div>
@@ -275,9 +275,9 @@ section.blk{padding:84px 0 8px}
     </section>
 
     <section class="blk ts" id="skills" aria-label="Skills and tools">
-      <h3 class="dt">Tools</h3>
+      <h3 class="dt" style="--dot:#7c5cff">Tools</h3>
       <p>After Effects&nbsp;<span class="d">·</span> Blender&nbsp;<span class="d">·</span> Cavalry&nbsp;<span class="d">·</span> DaVinci Resolve &amp; Fusion&nbsp;<span class="d">·</span> Photoshop&nbsp;<span class="d">·</span> Figma&nbsp;<span class="d">·</span> Lottie / Bodymovin&nbsp;<span class="d">·</span> Jitter&nbsp;<span class="d">·</span> Rive</p>
-      <h3 class="dt">Skills</h3>
+      <h3 class="dt" style="--dot:#2f8fff">Skills</h3>
       <p>Motion Design&nbsp;<span class="d">·</span> Animation&nbsp;<span class="d">·</span> 3D&nbsp;<span class="d">·</span> Illustration&nbsp;<span class="d">·</span> Video Editing&nbsp;<span class="d">·</span> Brand Identity&nbsp;<span class="d">·</span> Logo Design&nbsp;<span class="d">·</span> Graphic Design&nbsp;<span class="d">·</span> UI/UX Design&nbsp;<span class="d">·</span> Website Design &amp; Build</p>
     </section>
   </div>
@@ -286,7 +286,7 @@ section.blk{padding:84px 0 8px}
 <main id="allwork" hidden>
   <div class="wrap pv">
     <a class="back" href="#work" aria-label="Back to selected work"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg></a>
-    <h1>All work <span class="n" id="acount" style="font-size:16px;color:var(--soft);letter-spacing:0"></span></h1>
+    <h1>All Works <span class="n" id="acount" style="font-size:16px;color:var(--soft);letter-spacing:0"></span></h1>
     <p class="lede" style="margin-top:8px">Launches, explainers and brand motion · Web2 &amp; Web3</p>
     <div class="plist" id="alist"></div>
   </div>
@@ -509,7 +509,7 @@ section.blk{padding:84px 0 8px}
   function route() {
     var h = (location.hash || '').slice(1);
     if (h === 'resume') { document.title = 'Resume — Klonex'; only(dv); jump(0); return; }
-    if (h === 'all-work') { from = 'all-work'; buildAll(); document.title = 'All work — Klonex'; only(av); jump(0); return; }
+    if (h === 'all-work') { from = 'all-work'; buildAll(); document.title = 'All Works — Klonex'; only(av); jump(0); return; }
     var m = h.indexOf('p-') === 0 ? P.filter(function (p) { return 'p-' + p.id === h; })[0] : null;
     if (m) {
       cur = m;
